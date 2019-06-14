@@ -45,11 +45,11 @@ int main(int argc, char** argv){
     path->append(nm->elist);
     // find paths (will return std::vector<std::vector<Node *>> object)
 
-	path->find_paths(std::string("e"), std::string("a"));
+	path->find_paths(std::string("a"), std::string("e"));
     // debug (show the paths found between 2 vertices that user specified)
     path->debug();
 	
-//////////////////////////////////////////////////////////check degree of node//////////
+//////////////////////////////////////////////////////////problem//////////
  
   /* int counter ;
    int degree[2][2];
@@ -114,66 +114,68 @@ for(int  i = 0; i < 2 ; i++){
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////	
+//////////////////////////////////Fleury's Algorithm problem////////////////////////////////////////////	
 /*
-pair< vector<int>, vector<double> > Dijkstra(const Graph & G, int origin, const vector<double> & cost)
-{
-	BinaryHeap B;
+int tempGraph[NODE][NODE];
 
-	int n = G.GetNumVertices();
+int findStartVert() {
+   for(int i = 0; i<NODE; i++) {
+      int deg = 0;
+      for(int j = 0; j<NODE; j++) {
+         if(tempGraph[i][j])
+            deg++;    
+      }
 
-	//Father of each vertex in the optimal path tree
-	vector<int> father(n, -1);
+      if(deg % 2 != 0)     
+         return i;         
+   }
+   return 0;   
+}
 
-	//Used to indicate whether a vertex is permanently labeled
-	vector<bool> permanent(n, false);
+bool isBridge(int u, int v) {
+   int deg = 0;
+   for(int i = 0; i<NODE; i++)
+      if(tempGraph[v][i])
+         deg++;
 
-	vector<double> pathCost(n, numeric_limits<double>::infinity());
-	
-	//Put s in the heap
-	B.Insert(0, origin);
-	pathCost[origin] = 0;
+   if(deg>1) {
+      return false;    
+   }
 
-	for(int i = 0; i < n; i++)
-	{
-		//Select the vertex that can be reached with smallest cost
-		int u = B.DeleteMin();
+   return true;  
+}
 
-		permanent[u] = true;
+int edgeCount() {
+   int count = 0;
+   for(int i = 0; i<NODE; i++)
+      for(int j = i; j<NODE; j++)
+         if(tempGraph[i][j])
+            count++;
+   return count;     
+}
 
-		//Update the heap with vertices adjacent to u
-		for(list<int>::const_iterator it = G.AdjList(u).begin(); it != G.AdjList(u).end(); it++)
-		{
-			int v = *it;
-			
-			if(permanent[v])
-				continue;
+void fleuryAlgorithm(int start) {
+   static int edge = edgeCount();
+   for(int v = 0; v<NODE; v++) {
+      if(tempGraph[start][v]) {       
+         if(edge <= 1 || !isBridge(start, v)) {
+            cout << start << "--" << v << " ";
+            tempGraph[start][v] = tempGraph[v][start] = 0;    
+            edge--;    //reduce edge
+            fleuryAlgorithm(v);
+         }
+      }
+   }
+}
 
-			double c = pathCost[u] + cost[G.GetEdgeIndex(u,v)];
-
-			//v has not been discovered yet
-			if(father[v] == -1)
-			{
-				father[v] = u;	
-				pathCost[v] = c;
-				B.Insert(c, v);
-			}
-			//we found a cheaper connection to v
-			else if( LESS(c, pathCost[v]) )
-			{
-				father[v] = u;
-				pathCost[v] = c;
-				B.ChangeKey(c, v);
-			}
-		}
-	}
-
-	if(B.Size() > 0)
-		throw "Error: graph is not connected";
-
-	return make_pair(father, pathCost);
-}   */
-
+int main() {
+   for(int i = 0; i<NODE; i++)     //copy main graph to tempGraph
+      for(int j = 0; j<NODE; j++)
+         tempGraph[i][j] = graph[i][j];
+   cout << "Euler Path Or Circuit: ";
+   fleuryAlgorithm(findStartVert());
+}
+   */
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
