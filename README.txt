@@ -6,15 +6,13 @@
 #include "gplot.h"
 #include "path.h"
 using namespace std;
-
-// create NetworkManager first
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 NetworkManager *nm = new NetworkManager();
 map<string, vector<Edge *>> adv;
 vector<Edge *> dfs_paths;
 vector<Vertex *> existed_vertices;
-
 void dfs(string src);
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char** argv){
     // build basic topo
     nm->add_switch("a");
@@ -22,8 +20,7 @@ int main(int argc, char** argv){
     nm->add_switch("c");
     nm->add_switch("d");    
     nm->add_switch("e");
-
-
+以上5行是建立節點並且給予名稱
     nm->connect("a", "b");
     nm->connect("b", "c");
     nm->connect("c", "d");
@@ -31,13 +28,13 @@ int main(int argc, char** argv){
     nm->connect("e", "c");
     nm->connect("e", "b");
     nm->connect("c", "a");
-	
-
-
+以上7行是建立一個有向圖,此圖為moodle裡Project Announcement中的測資範例	
 	nm->print_all_e();	
+以上1行是顯示出建立出的有向圖邊連接狀況是否正確
 	nm-> print_all_v();
+以上1行是顯示出建立出的有向圖點的儲存狀況
 
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// create path
     Path *path;
     path=new Path();
